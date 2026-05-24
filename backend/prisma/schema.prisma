@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  role      String   @default("employee") // admin, dispatcher, employee
+  createdAt DateTime @default(now())
+}
+
+model Vehicle {
+  id            String   @id @default(uuid())
+  plate         String   @unique
+  type          String   // e.g. "4 ล้อ", "6 ล้อ"
+  maxWeight     Float
+  maxCbm        Float
+  currentWeight Float    @default(0)
+  currentCbm    Float    @default(0)
+  status        String   @default("AVAILABLE") // AVAILABLE, ASSIGNED, MAINTENANCE
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  bills         Bill[]
+}
+
+model Bill {
+  id            String   @id @default(uuid())
+  billNumber    String   @unique
+  customer      String
+  province      String
+  weight        Float
+  cbm           Float
+  status        String   @default("PENDING") // PENDING, ASSIGNED, DEPARTED, DELIVERED
+  
+  vehicleId     String?
+  vehicle       Vehicle? @relation(fields: [vehicleId], references: [id])
+  
+  logs          BillStatusLog[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model BillStatusLog {
+  id        String   @id @default(uuid())
+  billId    String
+  bill      Bill     @relation(fields: [billId], references: [id], onDelete: Cascade)
+  status    String
+  note      String?
+  createdAt DateTime @default(now())
+}

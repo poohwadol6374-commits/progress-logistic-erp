@@ -1,0 +1,22 @@
+.bill-list-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.w-full { width: 100%; }
+.max-w-md { max-width: 28rem; }
+.mb-6 { margin-bottom: 24px; }
+.p-6 { padding: 24px; }
+.py-8 { padding-top: 32px; padding-bottom: 32px; }
+.text-center { text-align: center; }
+
+.hover\:text-primary:hover { color: var(--primary-color); }
+.hover\:text-danger:hover { color: var(--status-danger); }
+.hover\:text-main:hover { color: var(--text-main); }
+.transition-colors { transition: color 0.2s ease; }
