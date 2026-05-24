@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, FileScan, Truck, Settings, Bell, User, FileText, BarChart2, Sparkles, LogOut } from 'lucide-react';
+import { LayoutDashboard, FileScan, Truck, Settings, Bell, User, FileText, BarChart2, Sparkles, LogOut, Map as MapIcon } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import AiSearchModal from '../components/AiSearchModal';
 import './DashboardLayout.css';
@@ -10,6 +10,7 @@ const navItems = [
   { path: '/ocr', label: 'OCR Center', icon: FileScan },
   { path: '/bills', label: 'Bill Management', icon: FileText },
   { path: '/dispatch', label: 'Dispatch', icon: Truck },
+  { path: '/map', label: 'Live Map', icon: MapIcon },
   { path: '/reports', label: 'Reports', icon: BarChart2 },
   { path: '/settings', label: 'Settings', icon: Settings },
 ];
@@ -41,7 +42,7 @@ export default function DashboardLayout() {
           {navItems.map((item) => {
             // Role-based visibility logic
             if (user?.role === 'DATA_ENTRY' && !['/ocr', '/settings'].includes(item.path)) return null;
-            if (user?.role === 'DISPATCHER' && !['/dashboard', '/dispatch', '/vehicles', '/bills'].includes(item.path)) return null;
+            if (user?.role === 'DISPATCHER' && !['/dashboard', '/dispatch', '/vehicles', '/bills', '/map'].includes(item.path)) return null;
             
             return (
               <NavLink

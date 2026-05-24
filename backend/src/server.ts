@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
 import { PrismaClient } from '@prisma/client';
 
 const app = express();
@@ -305,6 +306,20 @@ app.get('/api/bills/all', async (req, res) => {
     res.json(allBills);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch bills' });
+  }
+});
+
+// Serve React Frontend (Single App Mode for Production / Railway)
+const frontendPath = path.join(__dirname, '../../frontend/dist');
+app.use(express.static(frontendPath));
+
+// Fallback for React Router
+app.get('*', (req, res) => {
+  // Only serve index.html if it's not an API request
+  if (!req.path.startsWith('/api')) {
+    res.sendFile(path.join(frontendPath, 'index.html'));
+  } else {
+    res.status(404).json({ error: 'API route not found' });
   }
 });
 

@@ -10,6 +10,7 @@ import Settings from './pages/Settings';
 import OcrCenter from './pages/OcrCenter';
 import Vehicles from './pages/Vehicles';
 import DriverApp from './pages/DriverApp';
+import FleetMap from './pages/FleetMap';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -38,6 +39,7 @@ function App() {
             <Route path="ocr" element={<OcrCenter />} />
             <Route path="vehicles" element={<Vehicles />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="map" element={<FleetMap />} />
           </Route>
         </Routes>
       </BrowserRouter>

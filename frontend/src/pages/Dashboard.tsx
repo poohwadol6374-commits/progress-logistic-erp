@@ -21,6 +21,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchStats();
@@ -32,18 +33,39 @@ export default function Dashboard() {
       if (res.ok) {
         const data = await res.json();
         setStats(data);
+      } else {
+        setError('Failed to fetch data from the server');
       }
     } catch (error) {
       console.error('Failed to fetch stats:', error);
+      setError('Connection to server failed. Please check if the backend is running.');
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading || !stats) {
+  if (loading) {
     return (
-      <div className="h-full flex items-center justify-center">
-        <Loader2 size={48} className="animate-spin text-primary" />
+      <div className="h-full flex flex-col items-center justify-center">
+        <Loader2 size={48} className="animate-spin text-primary mb-4" />
+        <p className="text-gray-400">กำลังเชื่อมต่อกับฐานข้อมูล Supabase...</p>
+      </div>
+    );
+  }
+
+  if (error || !stats) {
+    return (
+      <div className="h-full flex flex-col items-center justify-center">
+        <div className="bg-red-500/10 border border-red-500/20 p-6 rounded-xl max-w-md text-center">
+          <h2 className="text-xl font-bold text-red-400 mb-2">เกิดข้อผิดพลาดในการโหลดข้อมูล</h2>
+          <p className="text-gray-400 mb-4">{error || 'ไม่พบข้อมูล Dashboard'}</p>
+          <button 
+            onClick={() => { setLoading(true); setError(null); fetchStats(); }}
+            className="btn btn-primary"
+          >
+            ลองใหม่อีกครั้ง
+          </button>
+        </div>
       </div>
     );
   }
