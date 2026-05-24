@@ -313,8 +313,8 @@ app.get('/api/bills/all', async (req, res) => {
 const frontendPath = path.join(__dirname, '../../frontend/dist');
 app.use(express.static(frontendPath));
 
-// Fallback for React Router
-app.get('*', (req, res) => {
+// Fallback for React Router (Express 5 compatible catch-all)
+app.use((req, res, next) => {
   // Only serve index.html if it's not an API request
   if (!req.path.startsWith('/api')) {
     res.sendFile(path.join(frontendPath, 'index.html'));
